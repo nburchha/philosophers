@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/29 02:20:38 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/04/29 04:00:41 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ void	print_data(t_data *data)
 	for (int i = 0; i < data->philo_count; i++)
 	{
 		printf("philo_id: %d\n", data->philos[i].philo_id);
-		printf("meal_counter: %d\n", data->philos[i].meal_counter);
 		printf("last_meal: %d\n", get_current_time(&data->philos[i].last_meal));
+		printf("right_fork_mutex: %p\n", data->philos[i].right_fork_mutex);
+		printf("left_fork_mutex: %p\n", data->philos[i].left_fork_mutex);
 	}
 }
 
@@ -39,7 +40,18 @@ int	main(int argc, char **argv)
 		return (printf("Error: invalid arguments\n"), 1);
 	if (!init_philos(&data))
 		return (cleanup(&data), printf("Error initializing philos\n"), 1);
-	print_data(&data);
+	// print_data(&data);
+	for (int i = 0; i < data.philo_count; i++)
+	{
+		pthread_create(&data.philos[i].thread, NULL, philo_routine, &data.philos[i]);
+		pthread_detach(data.philos[i].thread);
+	}
+
+	while (1)
+	{
+		if (data.philo_dead != -1)
+			break ;
+	}
 	cleanup(&data);
 	return (0);
 }
