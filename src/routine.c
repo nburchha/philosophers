@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 13:44:45 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:58:03 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,16 @@
 void	*philo_routine(void *philo_ptr)
 {
 	t_philo	*philo;
+	int	death;
 
 	philo = (t_philo *)philo_ptr;
-	while (philo->data->death == -1)
+	while (1)
 	{
+		pthread_mutex_lock(&philo->data->death_mutex);
+		death = philo->data->death;
+		pthread_mutex_unlock(&philo->data->death_mutex);
+		if (death != -1)
+			break ;
 		if (philo->philo_id % 2 == 0) {
 			pthread_mutex_lock(philo->right_fork_mutex);
 			print_status(philo, "has taken a fork");
