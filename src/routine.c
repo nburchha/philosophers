@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/04/29 03:50:30 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/05/23 13:44:45 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,8 @@ void	*philo_routine(void *philo_ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_ptr;
-	while (1)
+	while (philo->data->death == -1)
 	{
-		if (get_current_time(&philo->last_meal) > philo->data->time_to_die)
-		{
-			print_status(philo, "died");
-			pthread_mutex_lock(philo->print_mutex);
-			philo->data->philo_dead = philo->philo_id;
-			pthread_mutex_unlock(philo->print_mutex);
-			return (NULL);
-		}
 		if (philo->philo_id % 2 == 0) {
 			pthread_mutex_lock(philo->right_fork_mutex);
 			print_status(philo, "has taken a fork");
@@ -38,15 +30,15 @@ void	*philo_routine(void *philo_ptr)
 		}
 		print_status(philo, "has taken a fork");
 		print_status(philo, "is eating");
-		gettimeofday(&philo->last_meal, NULL);
-		usleep(philo->data->time_to_eat * 1000);
+		philo->last_meal = get_time();
+		ft_usleep(philo->data->time_to_eat);
 		pthread_mutex_unlock(philo->right_fork_mutex);
 		pthread_mutex_unlock(philo->left_fork_mutex);
 		pthread_mutex_lock(philo->meal_mutex);
 		philo->data->meal_counter += 1;
 		pthread_mutex_unlock(philo->meal_mutex);
 		print_status(philo, "is sleeping");
-		usleep(philo->data->time_to_sleep * 1000);
+		ft_usleep(philo->data->time_to_sleep);
 		print_status(philo, "is thinking");
 	}
 	return (NULL);
