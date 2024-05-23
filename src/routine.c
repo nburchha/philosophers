@@ -6,11 +6,18 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 13:58:03 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:38:44 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+void	case_one(t_philo *philo)
+{
+	pthread_mutex_lock(philo->right_fork_mutex);
+	print_status(philo, "has taken a fork");
+	pthread_mutex_lock(philo->left_fork_mutex);
+}
 
 void	*philo_routine(void *philo_ptr)
 {
@@ -18,6 +25,8 @@ void	*philo_routine(void *philo_ptr)
 	int	death;
 
 	philo = (t_philo *)philo_ptr;
+	if (philo->data->philo_count == 1)
+		return(case_one(philo), NULL);
 	while (1)
 	{
 		pthread_mutex_lock(&philo->data->death_mutex);

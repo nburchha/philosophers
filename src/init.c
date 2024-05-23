@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 13:31:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:33:07 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ bool	init_philos(t_data *data)
 		if (i != 0)
 			philos[i].left_fork_mutex = philos[i - 1].right_fork_mutex;
 		if (i == data->philo_count - 1)
-			philos[0].left_fork_mutex = philos[i].left_fork_mutex;
+			philos[0].left_fork_mutex = philos[i].right_fork_mutex;
 		philos[i].data = data;
 		i++;
 	}

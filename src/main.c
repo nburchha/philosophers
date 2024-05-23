@@ -6,11 +6,20 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 13:13:12 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:18:28 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
+
+void	join_threads(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	while (++i < data->philo_count)
+		pthread_join(data->philos[i].thread, NULL);
+}
 
 int	main(int argc, char **argv)
 {
@@ -33,6 +42,7 @@ int	main(int argc, char **argv)
 		if (data.death != -1)
 			break ;
 	}
+	join_threads(&data);
 	cleanup(&data);
 	return (0);
 }
