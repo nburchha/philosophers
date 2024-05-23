@@ -1,6 +1,6 @@
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g #-fsanitize=address
 SRC_FILES = main.c init.c util.c cleanup.c logging.c routine.c monitor.c
 OBJS = $(addprefix .obj/, $(SRC_FILES:.c=.o))
 GREEN=\033[32m

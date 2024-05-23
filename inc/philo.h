@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 13:38:18 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:34:34 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,17 @@
 # include <unistd.h>
 # include <sys/time.h>
 # include <stdbool.h>
+#include <stdint.h>
 
 typedef struct s_data t_data;
 
 typedef struct s_philo
 {
 	int				philo_id;
+	int				time_to_eat;
+	int				time_to_sleep;
 	pthread_mutex_t	*right_fork_mutex;
 	pthread_mutex_t	*left_fork_mutex;
-	pthread_mutex_t	*meal_mutex; //every time the philo ate, it will lock this mutex and increase the meal_counter, if (meal_counter == (meal_count / philo_count) && meal_count % philo_count == 0) then the philo will stop eating
 	uint64_t		last_meal;
 	pthread_t		thread;
 	t_data			*data;
@@ -36,10 +38,11 @@ typedef struct s_philo
 typedef struct s_data
 {
 	int				philo_count;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
 	int				meal_count; //optional, if -1 then no meal limit
+	pthread_mutex_t	meal_mutex;
 	int				meal_counter; // if (meal_counter == (meal_count / philo_count) && meal_count % philo_count == 0) then the philo will stop eating
 	int				death; //if a philo died, the philo will set this to his id
 	uint64_t		start; // TODO: change this to uint64_t and  use (start - get_time)
@@ -47,6 +50,7 @@ typedef struct s_data
 	pthread_t		monitor_thread;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	lock;
 }	t_data;
 
 void		*philo_routine(void *philo_ptr);

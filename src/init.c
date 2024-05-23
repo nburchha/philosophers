@@ -6,24 +6,14 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 14:33:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/23 16:37:30 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static void	null_mutexes(t_philo *philo)
-{
-	philo->right_fork_mutex = NULL;
-	philo->meal_mutex = NULL;
-}
-
 static bool	init_mutexes(t_philo *philo)
 {
-	philo->meal_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!philo->meal_mutex)
-		return (false);
-	pthread_mutex_init(philo->meal_mutex, NULL);
 	philo->right_fork_mutex = malloc(sizeof(pthread_mutex_t));
 	if (!philo->right_fork_mutex)
 		return (false);
@@ -44,7 +34,9 @@ bool	init_philos(t_data *data)
 	{
 		philos[i].philo_id = i + 1;
 		philos[i].last_meal = data->start;
-		null_mutexes(&philos[i]);
+		philos[i].time_to_eat = data->time_to_eat;
+		philos[i].time_to_sleep = data->time_to_sleep;
+		philos[i].right_fork_mutex = NULL;
 		if (!init_mutexes(&philos[i]))
 			return (false);
 		if (i != 0)
@@ -79,5 +71,7 @@ bool	init_data(t_data *data, int argc, char **argv)
 	data->start = get_time();
 	pthread_mutex_init(&data->print_mutex, NULL);
 	pthread_mutex_init(&data->death_mutex, NULL);
+	pthread_mutex_init(&data->meal_mutex, NULL);
+	pthread_mutex_init(&data->lock, NULL);
 	return (true);
 }
