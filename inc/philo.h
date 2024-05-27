@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/27 15:15:49 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/27 17:19:22 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define NONE 0
 # define FORK_RIGHT 1
 # define FORK_LEFT 2
-# define DEATH 3
+# define DEATH 4
 
 
 typedef struct s_data t_data;

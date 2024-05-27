@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/27 15:21:01 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:33:17 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void eat(t_philo *philo)
 		return (die(philo, DEATH | FORK_RIGHT | FORK_LEFT), (void)0);
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "has taken a fork");
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->death != -1)
+		return (die(philo, DEATH | FORK_RIGHT | FORK_LEFT), (void)0);
+	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "is eating");
 	pthread_mutex_lock(&philo->data->lock);
 	philo->last_meal = get_time();
@@ -42,6 +46,8 @@ void	*philo_routine(void *philo_ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_ptr;
+	die(philo, DEATH);
+	return (NULL);
 	while (1)
 	{
 		if (philo->philo_id % 2 == 0)
@@ -62,6 +68,5 @@ void	*philo_routine(void *philo_ptr)
 		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is thinking");
 	}
-	
 	return (NULL);
 }
