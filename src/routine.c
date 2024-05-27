@@ -6,66 +6,25 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 17:05:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:21:01 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	case_one(t_philo *philo)
+void eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->right_fork_mutex);
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->death != -1)
+		return (die(philo, DEATH | FORK_RIGHT), (void)0);
+	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "has taken a fork");
 	pthread_mutex_lock(philo->left_fork_mutex);
-}
-
-// void	*philo_routine(void *philo_ptr)
-// {
-// 	t_philo	*philo;
-// 	int	death;
-
-// 	philo = (t_philo *)philo_ptr;
-// 	if (philo->data->philo_count == 1)
-// 		return(case_one(philo), NULL);
-// 	while (1)
-// 	{
-// 		pthread_mutex_lock(&philo->data->death_mutex);
-// 		death = philo->data->death;
-// 		pthread_mutex_unlock(&philo->data->death_mutex);
-// 		if (death != -1)
-// 			break ;
-// 		if (philo->philo_id % 2 == 0) {
-// 			pthread_mutex_lock(philo->right_fork_mutex);
-// 			print_status(philo, "has taken a fork");
-// 			pthread_mutex_lock(philo->left_fork_mutex);
-// 		} else {
-// 			pthread_mutex_lock(philo->left_fork_mutex);
-// 			print_status(philo, "has taken a fork");
-// 			pthread_mutex_lock(philo->right_fork_mutex);
-// 		}
-// 		print_status(philo, "has taken a fork");
-// 		print_status(philo, "is eating");
-// 		pthread_mutex_lock(&philo->data->lock);
-// 		philo->last_meal = get_time();
-// 		pthread_mutex_unlock(&philo->data->lock);
-// 		ft_usleep(philo->time_to_eat);
-// 		pthread_mutex_unlock(philo->right_fork_mutex);
-// 		pthread_mutex_unlock(philo->left_fork_mutex);
-// 		pthread_mutex_lock(&philo->data->meal_mutex);
-// 		philo->data->meal_counter += 1;
-// 		pthread_mutex_unlock(&philo->data->meal_mutex);
-// 		print_status(philo, "is sleeping");
-// 		ft_usleep(philo->time_to_sleep);
-// 		print_status(philo, "is thinking");
-// 	}
-// 	return (NULL);
-// }
-
-void eat(t_philo *philo) {
-	pthread_mutex_lock(philo->right_fork_mutex);
-	
-	print_status(philo, "has taken a fork");
-	pthread_mutex_lock(philo->left_fork_mutex);
+	pthread_mutex_lock(&philo->data->death_mutex);
+	if (philo->data->death != -1)
+		return (die(philo, DEATH | FORK_RIGHT | FORK_LEFT), (void)0);
+	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "has taken a fork");
 	print_status(philo, "is eating");
 	pthread_mutex_lock(&philo->data->lock);
@@ -76,27 +35,31 @@ void eat(t_philo *philo) {
 	pthread_mutex_unlock(philo->left_fork_mutex);
 }
 
+/*mutex integer is used to now which mutex needs to be unlocked in case of death midst routine*/
+
 void	*philo_routine(void *philo_ptr)
 {
 	t_philo	*philo;
-	int	death;
 
 	philo = (t_philo *)philo_ptr;
-	if (philo->data->philo_count == 1)
-		return(case_one(philo), NULL);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->death_mutex);
-		death = philo->data->death;
-		pthread_mutex_unlock(&philo->data->death_mutex);
-		if (death != -1)
-			break ;
+		if (philo->philo_id % 2 == 0)
+			usleep(100);
 		eat(philo);
 		pthread_mutex_lock(&philo->data->meal_mutex);
 		philo->data->meal_counter += 1;
 		pthread_mutex_unlock(&philo->data->meal_mutex);
+		pthread_mutex_lock(&philo->data->death_mutex);
+		if (philo->data->death != -1)
+			return (die(philo, DEATH), NULL);
+		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is sleeping");
 		ft_usleep(philo->time_to_sleep);
+		pthread_mutex_lock(&philo->data->death_mutex);
+		if (philo->data->death != -1)
+			return (die(philo, DEATH), NULL);
+		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is thinking");
 	}
 	

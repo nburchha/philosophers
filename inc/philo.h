@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/23 16:34:34 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:15:49 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@
 # include <sys/time.h>
 # include <stdbool.h>
 #include <stdint.h>
+
+# define NONE 0
+# define FORK_RIGHT 1
+# define FORK_LEFT 2
+# define DEATH 3
+
 
 typedef struct s_data t_data;
 
@@ -61,6 +67,7 @@ void		cleanup(t_data *data);
 void		print_status(t_philo *philo, char *status);
 uint64_t	get_time(void);
 int			ft_atoi(const char *str);
-void	ft_usleep(uint64_t time);
+void		ft_usleep(uint64_t time);
+void		die(t_philo *philo, int to_unlock);
 
 #endif
