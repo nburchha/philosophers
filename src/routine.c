@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/28 15:12:00 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/28 17:45:05 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	*philo_routine(void *philo_ptr)
 	philo = (t_philo *)philo_ptr;
 	while (1)
 	{
-		if (philo->philo_id % 2 == 0)
-			usleep(100);
+		// if (philo->philo_id % 2 == 0)
+		// 	usleep(100);
 		eat(philo);
 		pthread_mutex_lock(&philo->data->meal_mutex);
 		philo->data->meal_counter += 1;

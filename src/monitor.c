@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/05/28 15:16:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/28 16:59:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ void	*monitor(void *param)
 		if (data->death != -1)
 			return (NULL);
 		check_philos(data);
+		pthread_mutex_lock(&data->meal_mutex);
 		if (data->meal_count != -1 && data->meal_counter >= data->meal_count * data->philo_count)
 			data->death = 0;
+		pthread_mutex_unlock(&data->meal_mutex);
 	}
 	return (NULL);
 }

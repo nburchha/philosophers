@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/28 15:14:58 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/28 17:07:29 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,16 @@ bool	init_philos(t_data *data)
 		philos[i].last_meal = data->start;
 		philos[i].time_to_eat = data->time_to_eat;
 		philos[i].time_to_sleep = data->time_to_sleep;
-		// if (!init_mutexes(&philos[i]))
-		// 	return (false);
-		// philos[i].right_fork_mutex = &data->forks[i];
-		(&(philos[i]))->right_fork_mutex = &(data->forks[i]);
-		(&(philos[i]))->left_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
+		if (i % 2 == 0)
+		{
+			(&(philos[i]))->right_fork_mutex = &(data->forks[i]);
+			(&(philos[i]))->left_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
+		}
+		else
+		{
+			(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
+			(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
+		}
 		philos[i].data = data;
 		i++;
 	}
