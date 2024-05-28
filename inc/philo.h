@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/27 17:19:22 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:12:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ typedef struct s_philo
 	int				philo_id;
 	int				time_to_eat;
 	int				time_to_sleep;
+	uint64_t		last_meal;
 	pthread_mutex_t	*right_fork_mutex;
 	pthread_mutex_t	*left_fork_mutex;
-	uint64_t		last_meal;
 	pthread_t		thread;
 	t_data			*data;
 }	t_philo;
@@ -56,6 +56,7 @@ typedef struct s_data
 	pthread_t		monitor_thread;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	lock;
 }	t_data;
 

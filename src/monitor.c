@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/05/27 14:52:05 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/28 15:16:08 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	*monitor(void *param)
 		if (data->death != -1)
 			return (NULL);
 		check_philos(data);
+		if (data->meal_count != -1 && data->meal_counter >= data->meal_count * data->philo_count)
+			data->death = 0;
 	}
 	return (NULL);
 }
