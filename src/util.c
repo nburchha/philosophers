@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:59:40 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/28 13:30:39 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/31 12:27:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void	die(t_philo *philo, int to_unlock)
 {
 	// pthread_mutex_lock(&philo->data->print_mutex);
-	if (to_unlock & FORK_RIGHT)// && printf("right fork unlocked\n"))
-		pthread_mutex_unlock(philo->right_fork_mutex);
 	if (to_unlock & FORK_LEFT)// && printf("left fork unlocked\n"))
 		pthread_mutex_unlock(philo->left_fork_mutex);
+	if (to_unlock & FORK_RIGHT)// && printf("right fork unlocked\n"))
+		pthread_mutex_unlock(philo->right_fork_mutex);
 	if (to_unlock & DEATH)// && printf("philo death mutex unlocked\n"))
 		pthread_mutex_unlock(&philo->data->death_mutex);
 	// pthread_mutex_unlock(&philo->data->print_mutex);

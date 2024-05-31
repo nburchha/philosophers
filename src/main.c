@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/27 15:20:52 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/05/31 15:33:40 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,24 @@ void	threads(t_data *data)
 	int	i;
 
 	pthread_create(&data->monitor_thread, NULL, monitor, data);
-	i = -1;
-	while (++i < data->philo_count)
+	i = 0;
+	while (i < data->philo_count)
 	{
 		pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]);
+		i += 1;
 	}
+	// ft_usleep(10);
+	// i = 0;
+	// while (i < data->philo_count)
+	// {
+	// 	pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]);
+	// 	i += 2;
+	// }
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	int		flag;
 	int		i;
 
 	if (!init_data(&data, argc, argv))
@@ -43,14 +50,6 @@ int	main(int argc, char **argv)
 		return (cleanup(&data), 0);
 	}
 	threads(&data);
-	while (1)
-	{
-		pthread_mutex_lock(&data.death_mutex);
-		flag = data.death;
-		pthread_mutex_unlock(&data.death_mutex);
-		if (flag != -1)
-			break ;
-	}
 	i = 0;
 	while (i < data.philo_count)
 		pthread_join(data.philos[i++].thread, NULL);
