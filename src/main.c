@@ -6,13 +6,12 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:23:13 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 14:25:54 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-//protect creation of threads with checking for return value
 bool	threads(t_data *data)
 {
 	int	i;

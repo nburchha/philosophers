@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 13:23:14 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 14:33:11 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	*philo_routine(void *philo_ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_ptr;
-	if (philo->id % 2 != 0)
+	if (philo->id % 2 != 0 && philo->time_to_sleep > 0)
 		ft_sleep(philo->time_to_sleep / 2);
 	while (1)
 	{

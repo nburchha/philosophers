@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 13:29:59 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 14:35:38 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ bool	init_data(t_data *data, int argc, char **argv)
 	else
 		data->meal_count = -1;
 	if (data->philo_count < 1 || data->philo_count > 200 || \
-		data->time_to_die < 0 || data->time_to_eat < 0 || \
-		data->time_to_sleep < 0 || (argc == 6 && data->meal_count < 0))
+		data->time_to_die < 1 || data->time_to_eat < 1 || \
+		data->time_to_sleep < 1 || (argc == 6 && data->meal_count < 0))
 		return (false);
 	data->died = -1;
 	data->start = get_time();
