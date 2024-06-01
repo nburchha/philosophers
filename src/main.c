@@ -3,25 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 14:23:13 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
 //protect creation of threads with checking for return value
-void	threads(t_data *data)
+bool	threads(t_data *data)
 {
 	int	i;
 
-	pthread_create(&data->monitor_thread, NULL, monitor, data);
+	if (pthread_create(&data->monitor_thread, NULL, monitor, data))
+		return (printf("Error creating monitor thread\n"), cleanup(data), \
+		false);
 	i = -1;
 	while (++i < data->philo_count)
-		pthread_create(&data->philos[i].thread, NULL, philo_routine, \
-					&data->philos[i]);
+		if (pthread_create(&data->philos[i].thread, NULL, philo_routine, \
+			&data->philos[i]))
+			return (printf("Error creating philo thread\n"), cleanup(data), \
+			false);
+	return (true);
 }
 
 int	main(int argc, char **argv)
@@ -40,7 +45,8 @@ int	main(int argc, char **argv)
 		printf("%d 1 died\n", data.time_to_die);
 		return (cleanup(&data), 0);
 	}
-	threads(&data);
+	if (!threads(&data))
+		return (1);
 	i = 0;
 	while (i < data.philo_count)
 		pthread_join(data.philos[i++].thread, NULL);
