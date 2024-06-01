@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:55:31 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 13:29:59 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ bool	init_data(t_data *data, int argc, char **argv)
 	if (data->philo_count < 1 || data->philo_count > 200 || \
 		data->time_to_die < 0 || data->time_to_eat < 0 || \
 		data->time_to_sleep < 0 || (argc == 6 && data->meal_count < 0))
-		return (printf("All input values must be positive and number of \
-				philosophers must be between 1 and 200!\n"), false);
+		return (false);
 	data->died = -1;
 	data->start = get_time();
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 13:23:14 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	*philo_routine(void *philo_ptr)
 			return (die(philo, DEATH), NULL);
 		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is thinking");
-		// ft_sleep(1);
 	}
 	return (NULL);
 }
