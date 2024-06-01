@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 01:42:42 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/31 12:16:31 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:27:11 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,4 @@ void	cleanup(t_data *data)
 	pthread_mutex_destroy(&data->print_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
 	pthread_mutex_destroy(&data->meal_mutex);
-	pthread_mutex_destroy(&data->lock);
 }

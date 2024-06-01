@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/06/01 01:28:36 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 02:53:27 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 void	check_death(t_data *data)
 {
-	int	i;
+	int			i;
 	uint64_t	last_meal;
 
 	i = -1;
 	while (++i < data->philo_count)
 	{
-		pthread_mutex_lock(&data->lock);
+		pthread_mutex_lock(&data->philos[i].last_meal_mutex);
 		last_meal = data->philos[i].last_meal;
-		pthread_mutex_unlock(&data->lock);
+		pthread_mutex_unlock(&data->philos[i].last_meal_mutex);
 		if (get_time() - last_meal > (uint64_t)data->time_to_die)
 		{
 			pthread_mutex_lock(&data->death_mutex);
-			data->death = data->philos[i].philo_id;
+			data->died = data->philos[i].id;
 			pthread_mutex_unlock(&data->death_mutex);
 			print_status(&data->philos[i], "died");
 			return ;
@@ -44,14 +44,15 @@ void	check_meals(t_data *data)
 	while (++i < data->philo_count)
 	{
 		pthread_mutex_lock(&data->philos[i].meal_mutex);
-		if (data->philos[i].meal_count >= data->meal_count && data->meal_count != -1)
+		if (data->philos[i].meal_count >= data->meal_count && \
+			data->meal_count != -1)
 			count++;
 		pthread_mutex_unlock(&data->philos[i].meal_mutex);
 	}
 	if (count == data->philo_count)
 	{
 		pthread_mutex_lock(&data->death_mutex);
-		data->death = 0;
+		data->died = 0;
 		pthread_mutex_unlock(&data->death_mutex);
 	}
 }
@@ -64,7 +65,7 @@ void	*monitor(void *param)
 	while (1)
 	{
 		pthread_mutex_lock(&data->death_mutex);
-		if (data->death != -1)
+		if (data->died != -1)
 			return (pthread_mutex_unlock(&data->death_mutex), NULL);
 		pthread_mutex_unlock(&data->death_mutex);
 		check_death(data);

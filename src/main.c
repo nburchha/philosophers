@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:15:12 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 02:56:13 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	threads(t_data *data)
 	pthread_create(&data->monitor_thread, NULL, monitor, data);
 	i = -1;
 	while (++i < data->philo_count)
-		pthread_create(&data->philos[i].thread, NULL, philo_routine, &data->philos[i]);
+		pthread_create(&data->philos[i].thread, NULL, philo_routine, \
+					&data->philos[i]);
 }
 
 int	main(int argc, char **argv)
