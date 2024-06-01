@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/31 12:37:08 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 02:14:39 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
-
-// static bool	init_mutexes(t_philo *philo)
-// {
-// 	// philo->right_fork_mutex = malloc(sizeof(pthread_mutex_t));
-// 	// if (!philo->right_fork_mutex)
-// 	// 	return (false);
-// 	// pthread_mutex_init(&philo->right_fork_mutex, NULL);
-// 	return (true);
-// }
 
 bool	init_philos(t_data *data)
 {
@@ -36,17 +27,10 @@ bool	init_philos(t_data *data)
 		philos[i].last_meal = data->start;
 		philos[i].time_to_eat = data->time_to_eat;
 		philos[i].time_to_sleep = data->time_to_sleep;
-		if (i % 2 != 0)
-		{
-			(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
-			(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
-			// printf("calculation: %d %d\n", i, (i + 1) % data->philo_count);
-		}
-		else
-		{
-			(&(philos[i]))->left_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
-			(&(philos[i]))->right_fork_mutex = &(data->forks[i]);
-		}
+		philos[i].meal_count = 0;
+		pthread_mutex_init(&philos[i].meal_mutex, NULL);
+		(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
+		(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) % data->philo_count]);
 		philos[i].data = data;
 		i++;
 	}
@@ -79,7 +63,6 @@ bool	init_data(t_data *data, int argc, char **argv)
 		data->meal_count = ft_atoi(argv[5]);
 	else
 		data->meal_count = -1;
-	data->meal_counter = 0;
 	if (data->philo_count < 1 || data->philo_count > 200 ||
 		data->time_to_die < 0 || data->time_to_eat < 0 ||
 		data->time_to_sleep < 0 || (argc == 6 && data->meal_count < 0))

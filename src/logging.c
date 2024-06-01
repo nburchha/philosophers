@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logging.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 01:48:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/29 12:54:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 01:02:04 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

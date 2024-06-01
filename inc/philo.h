@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/28 15:12:11 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 01:12:47 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ typedef struct s_philo
 	int				philo_id;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				meal_count;
 	uint64_t		last_meal;
+	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	*right_fork_mutex;
 	pthread_mutex_t	*left_fork_mutex;
 	pthread_t		thread;
@@ -49,7 +51,6 @@ typedef struct s_data
 	int	time_to_sleep;
 	int				meal_count; //optional, if -1 then no meal limit
 	pthread_mutex_t	meal_mutex;
-	int				meal_counter; // if (meal_counter == (meal_count / philo_count) && meal_count % philo_count == 0) then the philo will stop eating
 	int				death; //if a philo died, the philo will set this to his id
 	uint64_t		start; // TODO: change this to uint64_t and  use (start - get_time)
 	t_philo			*philos;

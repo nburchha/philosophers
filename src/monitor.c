@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/05/31 14:41:16 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 01:28:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-void	check_philos(t_data *data)
+void	check_death(t_data *data)
 {
 	int	i;
 	uint64_t	last_meal;
@@ -34,6 +34,28 @@ void	check_philos(t_data *data)
 	}
 }
 
+void	check_meals(t_data *data)
+{
+	int	i;
+	int	count;
+
+	i = -1;
+	count = 0;
+	while (++i < data->philo_count)
+	{
+		pthread_mutex_lock(&data->philos[i].meal_mutex);
+		if (data->philos[i].meal_count >= data->meal_count && data->meal_count != -1)
+			count++;
+		pthread_mutex_unlock(&data->philos[i].meal_mutex);
+	}
+	if (count == data->philo_count)
+	{
+		pthread_mutex_lock(&data->death_mutex);
+		data->death = 0;
+		pthread_mutex_unlock(&data->death_mutex);
+	}
+}
+
 void	*monitor(void *param)
 {
 	t_data	*data;
@@ -45,15 +67,8 @@ void	*monitor(void *param)
 		if (data->death != -1)
 			return (pthread_mutex_unlock(&data->death_mutex), NULL);
 		pthread_mutex_unlock(&data->death_mutex);
-		check_philos(data);
-		pthread_mutex_lock(&data->meal_mutex);
-		if (data->meal_count != -1 && data->meal_counter >= data->meal_count * data->philo_count)
-		{
-			pthread_mutex_lock(&data->death_mutex);
-			data->death = 0;
-			pthread_mutex_unlock(&data->death_mutex);
-		}
-		pthread_mutex_unlock(&data->meal_mutex);
+		check_death(data);
+		check_meals(data);
 		ft_usleep(0);
 	}
 	return (NULL);

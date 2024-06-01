@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/05/31 15:34:14 by nburchha         ###   ########.fr       */
+/*   Updated: 2024/06/01 01:51:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,6 @@ void eat(t_philo *philo)
 		return (die(philo, DEATH | FORK_LEFT), (void)0);
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "has taken a fork");
-	pthread_mutex_lock(&philo->data->death_mutex);
-	if (philo->data->death != -1)
-		return (die(philo, DEATH | FORK_LEFT), (void)0);
-	pthread_mutex_unlock(&philo->data->death_mutex);
 	pthread_mutex_lock(philo->right_fork_mutex);
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (philo->data->death != -1)
@@ -46,15 +42,14 @@ void	*philo_routine(void *philo_ptr)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_ptr;
-	// printf("philo id: %d\nforks:\nright: %p, left: %p\n\n", philo->philo_id, philo->right_fork_mutex, philo->left_fork_mutex);
 	if (philo->philo_id % 2 != 0)
 		ft_usleep(philo->time_to_sleep / 2);
 	while (1)
 	{
 		eat(philo);
-		pthread_mutex_lock(&philo->data->meal_mutex);
-		philo->data->meal_counter += 1;
-		pthread_mutex_unlock(&philo->data->meal_mutex);
+		pthread_mutex_lock(&philo->meal_mutex);
+		philo->meal_count += 1;
+		pthread_mutex_unlock(&philo->meal_mutex);
 		pthread_mutex_lock(&philo->data->death_mutex);
 		if (philo->data->death != -1)
 			return (die(philo, DEATH), NULL);
