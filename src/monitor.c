@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/06/01 02:53:27 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*monitor(void *param)
 		pthread_mutex_unlock(&data->death_mutex);
 		check_death(data);
 		check_meals(data);
-		ft_usleep(0);
+		ft_sleep(0);
 	}
 	return (NULL);
 }

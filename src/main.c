@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:56:13 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	main(int argc, char **argv)
 	if (data.philo_count == 1)
 	{
 		printf("0 1 has taken a fork\n");
-		ft_usleep(data.time_to_die);
+		ft_sleep(data.time_to_die);
 		printf("%d 1 died\n", data.time_to_die);
 		return (cleanup(&data), 0);
 	}

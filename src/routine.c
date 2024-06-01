@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:56:33 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	eat(t_philo *philo)
 	pthread_mutex_lock(&philo->last_meal_mutex);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->last_meal_mutex);
-	ft_usleep(philo->time_to_eat);
+	ft_sleep(philo->time_to_eat);
 	pthread_mutex_unlock(philo->left_fork_mutex);
 	pthread_mutex_unlock(philo->right_fork_mutex);
 }
@@ -43,7 +43,7 @@ void	*philo_routine(void *philo_ptr)
 
 	philo = (t_philo *)philo_ptr;
 	if (philo->id % 2 != 0)
-		ft_usleep(philo->time_to_sleep / 2);
+		ft_sleep(philo->time_to_sleep / 2);
 	while (1)
 	{
 		eat(philo);
@@ -55,12 +55,13 @@ void	*philo_routine(void *philo_ptr)
 			return (die(philo, DEATH), NULL);
 		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is sleeping");
-		ft_usleep(philo->time_to_sleep);
+		ft_sleep(philo->time_to_sleep);
 		pthread_mutex_lock(&philo->data->death_mutex);
 		if (philo->data->died != -1)
 			return (die(philo, DEATH), NULL);
 		pthread_mutex_unlock(&philo->data->death_mutex);
 		print_status(philo, "is thinking");
+		// ft_sleep(1);
 	}
 	return (NULL);
 }

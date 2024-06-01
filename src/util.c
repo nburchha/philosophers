@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:59:40 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:53:57 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_atoi(const char *str)
 	return (result * sign);
 }
 
-void	ft_usleep(uint64_t time)
+void	ft_sleep(uint64_t time)
 {
 	uint64_t	start;
 

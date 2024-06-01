@@ -6,7 +6,7 @@
 /*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:48:38 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 02:54:23 by niklasburch      ###   ########.fr       */
+/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void		cleanup(t_data *data);
 void		print_status(t_philo *philo, char *status);
 uint64_t	get_time(void);
 int			ft_atoi(const char *str);
-void		ft_usleep(uint64_t time);
+void		ft_sleep(uint64_t time);
 void		die(t_philo *philo, int to_unlock);
 
 #endif
