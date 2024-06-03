@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-The Dining Philosophers problem is a classic synchronization problem that involves philosophers who do nothing but think, eat, and sleep. They sit around a circular table with a bowl of spaghetti in the center and \( n \) (number of philosophers) forks placed between them. To eat, a philosopher needs to pick up both the fork on their left and the fork on their right. However, each fork can only be held by one philosopher at a time, leading to potential deadlocks and resource starvation.
+The Dining Philosophers problem is a classic synchronization problem that involves philosophers who do nothing but think, eat, and sleep. They sit around a circular table with a bowl of spaghetti in the center and n (number of philosophers) forks placed between them. To eat, a philosopher needs to pick up both the fork on their left and the fork on their right. However, each fork can only be held by one philosopher at a time, leading to potential deadlocks and resource starvation.
 
 ## Solution Overview
 
