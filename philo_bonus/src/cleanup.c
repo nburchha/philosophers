@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 01:42:42 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 13:50:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:27:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ void	cleanup(t_data *data)
 	while (++i < data->philo_count)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philos[i].meal_mutex);
-		pthread_mutex_destroy(&data->philos[i].last_meal_mutex);
+		pthread_mutex_destroy(&data->philos[i].meal_sem);
+		pthread_mutex_destroy(&data->philos[i].last_meal_sem);
 	}
 	free(data->philos);
 	free(data->forks);
-	pthread_mutex_destroy(&data->print_mutex);
-	pthread_mutex_destroy(&data->death_mutex);
-	pthread_mutex_destroy(&data->meal_mutex);
+	pthread_mutex_destroy(&data->print_sem);
+	pthread_mutex_destroy(&data->death_sem);
+	pthread_mutex_destroy(&data->meal_sem);
 }

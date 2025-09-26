@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
+/*   Updated: 2025/09/26 12:27:37 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	check_death(t_data *data)
 	i = -1;
 	while (++i < data->philo_count)
 	{
-		pthread_mutex_lock(&data->philos[i].last_meal_mutex);
+		pthread_mutex_lock(&data->philos[i].last_meal_sem);
 		last_meal = data->philos[i].last_meal;
-		pthread_mutex_unlock(&data->philos[i].last_meal_mutex);
+		pthread_mutex_unlock(&data->philos[i].last_meal_sem);
 		if (get_time() - last_meal > (uint64_t)data->time_to_die)
 		{
-			pthread_mutex_lock(&data->death_mutex);
+			pthread_mutex_lock(&data->death_sem);
 			data->died = data->philos[i].id;
-			pthread_mutex_unlock(&data->death_mutex);
+			pthread_mutex_unlock(&data->death_sem);
 			print_status(&data->philos[i], "died");
 			return ;
 		}
@@ -43,17 +43,17 @@ void	check_meals(t_data *data)
 	count = 0;
 	while (++i < data->philo_count)
 	{
-		pthread_mutex_lock(&data->philos[i].meal_mutex);
+		pthread_mutex_lock(&data->philos[i].meal_sem);
 		if (data->philos[i].meal_count >= data->meal_count && \
-			data->meal_count != -1)
+data->meal_count != -1)
 			count++;
-		pthread_mutex_unlock(&data->philos[i].meal_mutex);
+		pthread_mutex_unlock(&data->philos[i].meal_sem);
 	}
 	if (count == data->philo_count)
 	{
-		pthread_mutex_lock(&data->death_mutex);
+		pthread_mutex_lock(&data->death_sem);
 		data->died = 0;
-		pthread_mutex_unlock(&data->death_mutex);
+		pthread_mutex_unlock(&data->death_sem);
 	}
 }
 
@@ -64,10 +64,10 @@ void	*monitor(void *param)
 	data = (t_data *)param;
 	while (1)
 	{
-		pthread_mutex_lock(&data->death_mutex);
+		pthread_mutex_lock(&data->death_sem);
 		if (data->died != -1)
-			return (pthread_mutex_unlock(&data->death_mutex), NULL);
-		pthread_mutex_unlock(&data->death_mutex);
+			return (pthread_mutex_unlock(&data->death_sem), NULL);
+		pthread_mutex_unlock(&data->death_sem);
 		check_death(data);
 		check_meals(data);
 		ft_sleep(0);

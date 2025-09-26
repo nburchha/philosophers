@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 01:48:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:00:50 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:27:02 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	print_status(t_philo *philo, char *status)
 {
-	pthread_mutex_lock(&philo->data->print_mutex);
+	pthread_mutex_lock(&philo->data->print_sem);
 	printf("%llu %d %s\n", get_time() - philo->data->start,
 		philo->id, status);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	pthread_mutex_unlock(&philo->data->print_sem);
 }

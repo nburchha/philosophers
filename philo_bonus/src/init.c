@@ -6,13 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:35:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:46:07 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-bool	init_philos(t_data *data)
+static bool	init_philos(t_data *data)
 {
 	t_philo	*philos;
 	int		i;
@@ -28,11 +28,11 @@ bool	init_philos(t_data *data)
 		philos[i].time_to_eat = data->time_to_eat;
 		philos[i].time_to_sleep = data->time_to_sleep;
 		philos[i].meal_count = 0;
-		pthread_mutex_init(&philos[i].meal_mutex, NULL);
-		pthread_mutex_init(&philos[i].last_meal_mutex, NULL);
-		(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
-		(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) \
-		% data->philo_count]);
+		pthread_mutex_init(&philos[i].meal_sem, NULL);
+		pthread_mutex_init(&philos[i].last_meal_sem, NULL);
+		// (&(philos[i]))->left_fork_mutex = &(data->forks[i]);
+		// (&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) \
+		// % data->philo_count]);
 		philos[i].data = data;
 		i++;
 	}
@@ -40,16 +40,26 @@ bool	init_philos(t_data *data)
 	return (true);
 }
 
-void	init_mutexes(t_data *data)
+static bool	init_sync_sems(t_data *d)
 {
-	int	i;
-
-	pthread_mutex_init(&data->print_mutex, NULL);
-	pthread_mutex_init(&data->death_mutex, NULL);
-	pthread_mutex_init(&data->meal_mutex, NULL);
-	i = -1;
-	while (++i < data->philo_count)
-		pthread_mutex_init(&data->forks[i], NULL);
+	d->print_sem = d->death_sem = d->meal_sem = SEM_FAILED;
+	d->print_sem = sem_open("/print", O_CREAT | O_EXCL, 0644, 1);
+	if (d->print_sem == SEM_FAILED)
+		return (false);
+	d->death_sem = sem_open("/death", O_CREAT | O_EXCL, 0644, 1);
+	if (d->death_sem == SEM_FAILED)
+	{
+		close_unlink(&d->print_sem, "/print");
+		return (false);
+	}
+	d->meal_sem = sem_open("/meal", O_CREAT | O_EXCL, 0644, 1);
+	if (d->meal_sem == SEM_FAILED)
+	{
+		close_unlink(&d->death_sem, "/death");
+		close_unlink(&d->print_sem, "/print");
+		return (false);
+	}
+	return (true);
 }
 
 bool	init_data(t_data *data, int argc, char **argv)
@@ -64,15 +74,14 @@ bool	init_data(t_data *data, int argc, char **argv)
 		data->meal_count = ft_atoi(argv[5]);
 	else
 		data->meal_count = -1;
-	if (data->philo_count < 1 || data->philo_count > 200 || \
-		data->time_to_die < 1 || data->time_to_eat < 1 || \
-		data->time_to_sleep < 1 || (argc == 6 && data->meal_count < 0))
+	if (data->philo_count < 1 || data->philo_count > 200
+		|| data->time_to_die < 1 || data->time_to_eat < 1
+		|| data->time_to_sleep < 1 || (argc == 6 && data->meal_count < 0))
 		return (false);
 	data->died = -1;
 	data->start = get_time();
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->philo_count);
-	if (!data->forks)
+	data->forks = sem_open("/forks", O_CREAT, 0644, data->philo_count);
+	if (data->forks == SEM_FAILED)
 		return (false);
-	init_mutexes(data);
-	return (true);
+	return (init_sync_sems(data));
 }

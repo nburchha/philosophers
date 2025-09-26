@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:59:40 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:34:40 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:30:39 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	die(t_philo *philo, int to_unlock)
 	if (to_unlock & FORK_RIGHT)
 		pthread_mutex_unlock(philo->right_fork_mutex);
 	if (to_unlock & DEATH)
-		pthread_mutex_unlock(&philo->data->death_mutex);
+		pthread_mutex_unlock(&philo->data->death_sem);
 }
 
 uint64_t	get_time(void)
@@ -65,4 +65,11 @@ void	ft_sleep(uint64_t time)
 	start = get_time();
 	while (get_time() - start < time)
 		usleep(100);
+}
+
+void	close_unlink(sem_t **s, const char *name)
+{
+	if (*s && *s != SEM_FAILED) sem_close(*s);
+	sem_unlink(name);
+	*s = NULL;
 }
