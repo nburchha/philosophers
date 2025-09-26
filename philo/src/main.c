@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:25:54 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:04:36 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@ bool	threads(t_data *data)
 
 	if (pthread_create(&data->monitor_thread, NULL, monitor, data))
 		return (printf("Error creating monitor thread\n"), cleanup(data), \
-		false);
+false);
 	i = -1;
 	while (++i < data->philo_count)
 		if (pthread_create(&data->philos[i].thread, NULL, philo_routine, \
-			&data->philos[i]))
+&data->philos[i]))
 			return (printf("Error creating philo thread\n"), cleanup(data), \
-			false);
+false);
 	return (true);
 }
 

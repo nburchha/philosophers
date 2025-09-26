@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niklasburchhardt <niklasburchhardt@stud    +#+  +:+       +#+        */
+/*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 12:18:20 by nburchha          #+#    #+#             */
-/*   Updated: 2024/06/01 11:49:36 by niklasburch      ###   ########.fr       */
+/*   Updated: 2025/09/26 12:03:43 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	check_meals(t_data *data)
 	{
 		pthread_mutex_lock(&data->philos[i].meal_mutex);
 		if (data->philos[i].meal_count >= data->meal_count && \
-			data->meal_count != -1)
+data->meal_count != -1)
 			count++;
 		pthread_mutex_unlock(&data->philos[i].meal_mutex);
 	}
