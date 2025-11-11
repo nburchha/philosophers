@@ -14,12 +14,23 @@
 
 void	die(t_philo *philo, int to_unlock)
 {
-	if (to_unlock & FORK_LEFT)
-		pthread_mutex_unlock(philo->left_fork_mutex);
-	if (to_unlock & FORK_RIGHT)
-		pthread_mutex_unlock(philo->right_fork_mutex);
-	if (to_unlock & DEATH)
-		pthread_mutex_unlock(&philo->data->death_sem);
+	int	current_flag;
+
+	if (!philo || !philo->data)
+		return;
+	while (to_unlock)
+	{
+		current_flag = to_unlock & -to_unlock;
+		if (current_flag == SEM_FORKS)
+			close_unlink(&philo->data->forks, "/forks");
+		else if (current_flag == SEM_PRINT)
+			close_unlink(&philo->data->print_sem, "/print");
+		else if (current_flag == SEM_DEATH)
+			close_unlink(&philo->data->death_sem, "/death");
+		else if (current_flag == SEM_MEAL)
+			close_unlink(&philo->data->meal_sem, "/meal");
+		to_unlock &= ~current_flag;
+	}
 }
 
 uint64_t	get_time(void)
