@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 02:13:10 by niklasburch       #+#    #+#             */
-/*   Updated: 2025/09/26 12:27:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/11/11 10:40:24 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	eat(t_philo *philo)
 	pthread_mutex_lock(philo->left_fork_mutex);
 	pthread_mutex_lock(&philo->data->death_sem);
 	if (philo->data->died != -1)
-		return (die(philo, DEATH | FORK_LEFT), (void)0);
+		return;
 	pthread_mutex_unlock(&philo->data->death_sem);
 	print_status(philo, "has taken a fork");
 	pthread_mutex_lock(philo->right_fork_mutex);
 	pthread_mutex_lock(&philo->data->death_sem);
 	if (philo->data->died != -1)
-		return (die(philo, DEATH | FORK_RIGHT | FORK_LEFT), (void)0);
+		return;
 	pthread_mutex_unlock(&philo->data->death_sem);
 	print_status(philo, "has taken a fork");
 	print_status(philo, "is eating");
@@ -52,13 +52,13 @@ void	*philo_routine(void *philo_ptr)
 		pthread_mutex_unlock(&philo->meal_sem);
 		pthread_mutex_lock(&philo->data->death_sem);
 		if (philo->data->died != -1)
-			return (die(philo, DEATH), NULL);
+			return (NULL);
 		pthread_mutex_unlock(&philo->data->death_sem);
 		print_status(philo, "is sleeping");
 		ft_sleep(philo->time_to_sleep);
 		pthread_mutex_lock(&philo->data->death_sem);
 		if (philo->data->died != -1)
-			return (die(philo, DEATH), NULL);
+			return (NULL);
 		pthread_mutex_unlock(&philo->data->death_sem);
 		print_status(philo, "is thinking");
 	}
