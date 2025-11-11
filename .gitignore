@@ -52,6 +52,8 @@ Mkfile.old
 dkms.conf
 
 # Binaries
-/philo
-/philo_bonus
+# /philo
+# /philo_bonus
 !/philo.h
+
+.DS_Store
