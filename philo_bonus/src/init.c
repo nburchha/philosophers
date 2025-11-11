@@ -6,13 +6,13 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2025/09/26 12:46:07 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:28:37 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-static bool	init_philos(t_data *data)
+bool	init_philos(t_data *data)
 {
 	t_philo	*philos;
 	int		i;
@@ -28,11 +28,6 @@ static bool	init_philos(t_data *data)
 		philos[i].time_to_eat = data->time_to_eat;
 		philos[i].time_to_sleep = data->time_to_sleep;
 		philos[i].meal_count = 0;
-		pthread_mutex_init(&philos[i].meal_sem, NULL);
-		pthread_mutex_init(&philos[i].last_meal_sem, NULL);
-		// (&(philos[i]))->left_fork_mutex = &(data->forks[i]);
-		// (&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) \
-		// % data->philo_count]);
 		philos[i].data = data;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:51:31 by niklasburch       #+#    #+#             */
-/*   Updated: 2025/09/26 12:15:53 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:33:01 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ bool	threads(t_data *data)
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	int		i;
+	// int		i;
 
 	if (!init_data(&data, argc, argv))
 		return (printf("Error: invalid arguments\n"), 1);
-	// if (!init_philos(&data))
-	// 	return (cleanup(&data), printf("Error initializing philos\n"), 1);
-	// if (data.philo_count == 1)
-	// {
-	// 	printf("0 1 has taken a fork\n");
-	// 	ft_sleep(data.time_to_die);
-	// 	printf("%d 1 died\n", data.time_to_die);
-	// 	return (cleanup(&data), 0);
-	// }
+	if (!init_philos(&data))
+		return (cleanup(&data), printf("Error initializing philos\n"), 1);
+	if (data.philo_count == 1)
+	{
+		printf("0 1 has taken a fork\n");
+		ft_sleep(data.time_to_die);
+		printf("%d 1 died\n", data.time_to_die);
+		return (cleanup(&data), 0);
+	}
 	// if (!threads(&data))
 	// 	return (1);
 	// i = 0;
