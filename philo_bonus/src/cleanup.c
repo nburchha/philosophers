@@ -14,18 +14,15 @@
 
 void	cleanup(t_data *data)
 {
-	int	i;
-
-	i = -1;
-	while (++i < data->philo_count)
+	if (!data)
+		return;
+	if (data->philos)
 	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(&data->philos[i].meal_sem);
-		pthread_mutex_destroy(&data->philos[i].last_meal_sem);
+		free(data->philos);
+		data->philos = NULL;
 	}
-	free(data->philos);
-	free(data->forks);
-	pthread_mutex_destroy(&data->print_sem);
-	pthread_mutex_destroy(&data->death_sem);
-	pthread_mutex_destroy(&data->meal_sem);
+	close_unlink(&data->forks, "/forks");
+	close_unlink(&data->print_sem, "/print");
+	close_unlink(&data->death_sem, "/death");
+	close_unlink(&data->meal_sem, "/meal");
 }
