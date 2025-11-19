@@ -12,44 +12,59 @@
 
 #include "../inc/philo.h"
 
-bool	threads(t_data *data)
+void	*monitor_meals(void *param)
+{
+	t_data	*data;
+	int		i;
+
+	data = (t_data *)param;
+	i = 0;
+	while (i < data->philo_count)
+	{
+		sem_wait(data->meal_sem);
+		i++;
+	}
+	sem_post(data->death_sem);
+	return (NULL);
+}
+
+bool	start_processes(t_data *data)
 {
 	int	i;
 
-	if (pthread_create(&data->monitor_thread, NULL, monitor, data)) // TODO handle case with one philo
-		return (printf("Error creating monitor thread\n"), cleanup(data), \
-		false);
 	i = -1;
 	while (++i < data->philo_count)
-		if (pthread_create(&data->philos[i].thread, NULL, philo_routine, \
-			&data->philos[i]))
-			return (printf("Error creating philo thread\n"), cleanup(data), \
-			false);
+	{
+		data->philos[i].pid = fork();
+		if (data->philos[i].pid == -1)
+			return (printf("Error forking\n"), false);
+		if (data->philos[i].pid == 0)
+		{
+			philo_routine(&data->philos[i]);
+			exit(0);
+		}
+	}
+	if (data->meal_count != -1)
+		if (pthread_create(&data->monitor_thread, NULL, monitor_meals, data))
+			return (printf("Error creating meal monitor thread\n"), false);
 	return (true);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
-	// int		i;
+	int		i;
 
 	if (!init_data(&data, argc, argv))
 		return (printf("Error: invalid arguments\n"), 1);
 	if (!init_philos(&data))
 		return (cleanup(&data), printf("Error initializing philos\n"), 1);
-	if (data.philo_count == 1)
-	{
-		printf("0 1 has taken a fork\n");
-		ft_sleep(data.time_to_die);
-		printf("%d 1 died\n", data.time_to_die);
-		return (cleanup(&data), 0);
-	}
-	// if (!threads(&data))
-	// 	return (1);
-	// i = 0;
-	// while (i < data.philo_count)
-	// 	pthread_join(data.philos[i++].thread, NULL);
-	// pthread_join(data.monitor_thread, NULL);
-	// cleanup(&data);
+	if (!start_processes(&data))
+		return (cleanup(&data), 1);
+	sem_wait(data.death_sem);
+	i = -1;
+	while (++i < data.philo_count)
+		kill(data.philos[i].pid, SIGKILL);
+	cleanup(&data);
 	return (0);
 }

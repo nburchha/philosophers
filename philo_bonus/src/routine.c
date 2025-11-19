@@ -14,52 +14,41 @@
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork_mutex);
-	pthread_mutex_lock(&philo->data->death_sem);
-	if (philo->data->died != -1)
-		return;
-	pthread_mutex_unlock(&philo->data->death_sem);
+	sem_wait(philo->data->forks);
 	print_status(philo, "has taken a fork");
-	pthread_mutex_lock(philo->right_fork_mutex);
-	pthread_mutex_lock(&philo->data->death_sem);
-	if (philo->data->died != -1)
-		return;
-	pthread_mutex_unlock(&philo->data->death_sem);
+	sem_wait(philo->data->forks);
 	print_status(philo, "has taken a fork");
 	print_status(philo, "is eating");
-	pthread_mutex_lock(&philo->last_meal_sem);
+	sem_wait(philo->last_meal_sem);
 	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->last_meal_sem);
+	sem_post(philo->last_meal_sem);
 	ft_sleep(philo->time_to_eat);
-	pthread_mutex_unlock(philo->left_fork_mutex);
-	pthread_mutex_unlock(philo->right_fork_mutex);
+	sem_post(philo->data->forks);
+	sem_post(philo->data->forks);
 }
 
-/*mutex integer is used to now which mutex needs to be unlocked in case of 
-death midst routine*/
 void	*philo_routine(void *philo_ptr)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	pthread_t	monitor_thread;
 
 	philo = (t_philo *)philo_ptr;
-	if (philo->id % 2 != 0 && philo->time_to_sleep > 0)
-		ft_sleep(philo->time_to_sleep / 2);
+	if (pthread_create(&monitor_thread, NULL, monitor, philo))
+		return (NULL);
+	pthread_detach(monitor_thread);
+	if (philo->id % 2 != 0)
+		ft_sleep(philo->time_to_eat / 2);
 	while (1)
 	{
 		eat(philo);
-		pthread_mutex_lock(&philo->meal_sem);
 		philo->meal_count += 1;
-		pthread_mutex_unlock(&philo->meal_sem);
-		pthread_mutex_lock(&philo->data->death_sem);
-		if (philo->data->died != -1)
+		if (philo->meal_count == philo->data->meal_count)
+		{
+			sem_post(philo->data->meal_sem);
 			return (NULL);
-		pthread_mutex_unlock(&philo->data->death_sem);
+		}
 		print_status(philo, "is sleeping");
 		ft_sleep(philo->time_to_sleep);
-		pthread_mutex_lock(&philo->data->death_sem);
-		if (philo->data->died != -1)
-			return (NULL);
-		pthread_mutex_unlock(&philo->data->death_sem);
 		print_status(philo, "is thinking");
 	}
 	return (NULL);

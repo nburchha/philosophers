@@ -84,3 +84,33 @@ void	close_unlink(sem_t **s, const char *name)
 	sem_unlink(name);
 	*s = NULL;
 }
+
+void	create_sem_name(char *buffer, int id)
+{
+	int		i;
+	int		temp;
+	int		len;
+
+	i = 0;
+	while ("/philo_lm_"[i])
+	{
+		buffer[i] = "/philo_lm_"[i];
+		i++;
+	}
+	temp = id;
+	len = 0;
+	if (id == 0)
+		len = 1;
+	while (temp > 0)
+	{
+		temp /= 10;
+		len++;
+	}
+	buffer[i + len] = '\0';
+	while (len > 0)
+	{
+		buffer[i + len - 1] = (id % 10) + '0';
+		id /= 10;
+		len--;
+	}
+}

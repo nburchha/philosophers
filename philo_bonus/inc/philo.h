@@ -44,6 +44,7 @@ typedef struct s_philo
 	sem_t				*last_meal_sem;
 	sem_t				*forks;
 	pthread_t			thread;
+	pid_t				pid;
 	t_data				*data;
 }						t_philo;
 
@@ -75,5 +76,6 @@ int						ft_atoi(const char *str);
 void					ft_sleep(uint64_t time);
 void					die(t_philo *philo, int to_unlock);
 void					close_unlink(sem_t **s, const char *name);
+void					create_sem_name(char *buffer, int id);
 
 #endif

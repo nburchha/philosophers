@@ -12,6 +12,18 @@
 
 #include "../inc/philo.h"
 
+static bool	init_philo_sems(t_philo *philo)
+{
+	char	name[30];
+
+	create_sem_name(name, philo->id);
+	sem_unlink(name);
+	philo->last_meal_sem = sem_open(name, O_CREAT | O_EXCL, 0644, 1);
+	if (philo->last_meal_sem == SEM_FAILED)
+		return (false);
+	return (true);
+}
+
 bool	init_philos(t_data *data)
 {
 	t_philo	*philos;
@@ -29,6 +41,8 @@ bool	init_philos(t_data *data)
 		philos[i].time_to_sleep = data->time_to_sleep;
 		philos[i].meal_count = 0;
 		philos[i].data = data;
+		if (!init_philo_sems(&philos[i]))
+			return (false);
 		i++;
 	}
 	data->philos = philos;
@@ -38,22 +52,15 @@ bool	init_philos(t_data *data)
 static bool	init_sync_sems(t_data *d)
 {
 	d->print_sem = d->death_sem = d->meal_sem = SEM_FAILED;
+	sem_unlink("/print");
+	sem_unlink("/death");
+	sem_unlink("/meal");
+	sem_unlink("/forks");
 	d->print_sem = sem_open("/print", O_CREAT | O_EXCL, 0644, 1);
-	if (d->print_sem == SEM_FAILED)
+	d->death_sem = sem_open("/death", O_CREAT | O_EXCL, 0644, 0);
+	d->meal_sem = sem_open("/meal", O_CREAT | O_EXCL, 0644, 0);
+	if (d->print_sem == SEM_FAILED || d->death_sem == SEM_FAILED || d->meal_sem == SEM_FAILED)
 		return (false);
-	d->death_sem = sem_open("/death", O_CREAT | O_EXCL, 0644, 1);
-	if (d->death_sem == SEM_FAILED)
-	{
-		close_unlink(&d->print_sem, "/print");
-		return (false);
-	}
-	d->meal_sem = sem_open("/meal", O_CREAT | O_EXCL, 0644, 1);
-	if (d->meal_sem == SEM_FAILED)
-	{
-		close_unlink(&d->death_sem, "/death");
-		close_unlink(&d->print_sem, "/print");
-		return (false);
-	}
 	return (true);
 }
 

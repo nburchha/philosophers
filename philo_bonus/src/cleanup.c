@@ -18,6 +18,14 @@ void	cleanup(t_data *data)
 		return;
 	if (data->philos)
 	{
+		int i = 0;
+		char name[30];
+		while (i < data->philo_count)
+		{
+			create_sem_name(name, data->philos[i].id);
+			close_unlink(&data->philos[i].last_meal_sem, name);
+			i++;
+		}
 		free(data->philos);
 		data->philos = NULL;
 	}
