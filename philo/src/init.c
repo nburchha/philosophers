@@ -32,7 +32,7 @@ bool	init_philos(t_data *data)
 		pthread_mutex_init(&philos[i].last_meal_mutex, NULL);
 		(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
 		(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) \
-% data->philo_count]);
+		% data->philo_count]);
 		philos[i].data = data;
 		i++;
 	}
