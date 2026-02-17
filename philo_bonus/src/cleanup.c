@@ -14,12 +14,14 @@
 
 void	cleanup(t_data *data)
 {
+	int	i;
+		char name[30];
+
 	if (!data)
-		return;
+		return ;
 	if (data->philos)
 	{
-		int i = 0;
-		char name[30];
+		i = 0;
 		while (i < data->philo_count)
 		{
 			create_sem_name(name, data->philos[i].id);

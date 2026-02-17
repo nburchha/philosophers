@@ -59,7 +59,8 @@ static bool	init_sync_sems(t_data *d)
 	d->print_sem = sem_open("/print", O_CREAT | O_EXCL, 0644, 1);
 	d->death_sem = sem_open("/death", O_CREAT | O_EXCL, 0644, 0);
 	d->meal_sem = sem_open("/meal", O_CREAT | O_EXCL, 0644, 0);
-	if (d->print_sem == SEM_FAILED || d->death_sem == SEM_FAILED || d->meal_sem == SEM_FAILED)
+	if (d->print_sem == SEM_FAILED || d->death_sem == SEM_FAILED
+		|| d->meal_sem == SEM_FAILED)
 		return (false);
 	return (true);
 }

@@ -12,12 +12,12 @@
 
 #include "../inc/philo.h"
 
-void	die(t_philo *philo, int to_unlock)
+void	die(t_philo *philo, int to_unlock) // TODO remove this function, its not used in the bonus
 {
 	int	current_flag;
 
 	if (!philo || !philo->data)
-		return;
+		return ;
 	while (to_unlock)
 	{
 		current_flag = to_unlock & -to_unlock;
@@ -50,8 +50,8 @@ int	ft_atoi(const char *str)
 	i = 0;
 	sign = 1;
 	result = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-		|| str[i] == '\v' || str[i] == '\f' || str[i] == '\r')
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+		|| str[i] == '\f' || str[i] == '\r')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -81,15 +81,17 @@ void	ft_sleep(uint64_t time)
 void	close_unlink(sem_t **s, const char *name)
 {
 	if (*s && *s != SEM_FAILED) sem_close(*s);
+	if (*s && *s != SEM_FAILED)
+		sem_close(*s);
 	sem_unlink(name);
 	*s = NULL;
 }
 
 void	create_sem_name(char *buffer, int id)
 {
-	int		i;
-	int		temp;
-	int		len;
+	int	i;
+	int	temp;
+	int	len;
 
 	i = 0;
 	while ("/philo_lm_"[i])
