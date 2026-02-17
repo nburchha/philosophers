@@ -1,0 +1,55 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=8357)
+  Write of size 8 at 0x000106d03ed8 by main thread:
+    #0 eat routine.c:23 (philo_bonus:arm64+0x100001ff8)
+    #1 philo_routine routine.c:43 (philo_bonus:arm64+0x10000217c)
+    #2 start_processes main.c:43 (philo_bonus:arm64+0x100000800)
+    #3 main main.c:62 (philo_bonus:arm64+0x10000094c)
+
+  Previous read of size 8 at 0x000106d03ed8 by thread T1:
+    #0 monitor monitor.c:23 (philo_bonus:arm64+0x10000230c)
+
+  Location is heap block of size 288 at 0x000106d03e80 allocated by main thread:
+    #0 malloc <null> (libclang_rt.tsan_osx_dynamic.dylib:arm64e+0x63928)
+    #1 init_philos init.c:32 (philo_bonus:arm64+0x100000a54)
+    #2 main main.c:60 (philo_bonus:arm64+0x10000091c)
+
+  Thread T1 (tid=23352856, running) created by main thread at:
+    #0 pthread_create <null> (libclang_rt.tsan_osx_dynamic.dylib:arm64e+0x32b00)
+    #1 philo_routine routine.c:36 (philo_bonus:arm64+0x1000020f4)
+    #2 start_processes main.c:43 (philo_bonus:arm64+0x100000800)
+    #3 main main.c:62 (philo_bonus:arm64+0x10000094c)
+
+SUMMARY: ThreadSanitizer: data race routine.c:23 in eat
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=8356)
+  Write of size 8 at 0x000106d03e90 by main thread:
+    #0 eat routine.c:23 (philo_bonus:arm64+0x100001ff8)
+    #1 philo_routine routine.c:43 (philo_bonus:arm64+0x10000217c)
+    #2 start_processes main.c:43 (philo_bonus:arm64+0x100000800)
+    #3 main main.c:62 (philo_bonus:arm64+0x10000094c)
+
+  Previous read of size 8 at 0x000106d03e90 by thread T1:
+    #0 monitor monitor.c:23 (philo_bonus:arm64+0x10000230c)
+
+  As if synchronized via sleep:
+    #0 usleep <null> (libclang_rt.tsan_osx_dynamic.dylib:arm64e+0x30df0)
+    #1 ft_sleep util.c:78 (philo_bonus:arm64+0x100001a0c)
+    #2 philo_routine routine.c:40 (philo_bonus:arm64+0x10000216c)
+    #3 start_processes main.c:43 (philo_bonus:arm64+0x100000800)
+    #4 main main.c:62 (philo_bonus:arm64+0x10000094c)
+
+  Location is heap block of size 288 at 0x000106d03e80 allocated by main thread:
+    #0 malloc <null> (libclang_rt.tsan_osx_dynamic.dylib:arm64e+0x63928)
+    #1 init_philos init.c:32 (philo_bonus:arm64+0x100000a54)
+    #2 main main.c:60 (philo_bonus:arm64+0x10000091c)
+
+  Thread T1 (tid=23352852, running) created by main thread at:
+    #0 pthread_create <null> (libclang_rt.tsan_osx_dynamic.dylib:arm64e+0x32b00)
+    #1 philo_routine routine.c:36 (philo_bonus:arm64+0x1000020f4)
+    #2 start_processes main.c:43 (philo_bonus:arm64+0x100000800)
+    #3 main main.c:62 (philo_bonus:arm64+0x10000094c)
+
+SUMMARY: ThreadSanitizer: data race routine.c:23 in eat
+==================

@@ -1,6 +1,6 @@
 NAME = philo_bonus
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g #-fsanitize=address
+CFLAGS = -Wall -Werror -Wextra -g -fsanitize=thread
 SRC_FILES = main.c init.c util.c cleanup.c logging.c routine.c monitor.c
 OBJS = $(addprefix .obj/, $(SRC_FILES:.c=.o))
 GREEN=\033[32m
@@ -11,7 +11,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "$(GREEN)Linking$(RESET)"
-	@$(CC) $(OBJS) -o $(NAME) $(CFLAGS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 .obj/%.o: src/%.c
 	@echo "$(GREEN)Compiling $<$(RESET)"
