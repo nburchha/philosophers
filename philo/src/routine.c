@@ -14,13 +14,13 @@
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->left_fork_mutex);
+	pthread_mutex_lock(philo->left);
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (philo->data->died != -1)
 		return (die(philo, DEATH | FORK_LEFT), (void)0);
 	pthread_mutex_unlock(&philo->data->death_mutex);
 	print_status(philo, "has taken a fork");
-	pthread_mutex_lock(philo->right_fork_mutex);
+	pthread_mutex_lock(philo->right);
 	pthread_mutex_lock(&philo->data->death_mutex);
 	if (philo->data->died != -1)
 		return (die(philo, DEATH | FORK_RIGHT | FORK_LEFT), (void)0);
@@ -31,8 +31,8 @@ void	eat(t_philo *philo)
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&philo->last_meal_mutex);
 	ft_sleep(philo->time_to_eat);
-	pthread_mutex_unlock(philo->left_fork_mutex);
-	pthread_mutex_unlock(philo->right_fork_mutex);
+	pthread_mutex_unlock(philo->left);
+	pthread_mutex_unlock(philo->right);
 }
 
 /*mutex integer is used to now which mutex needs to be unlocked in case of 

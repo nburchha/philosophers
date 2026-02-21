@@ -15,9 +15,9 @@
 void	die(t_philo *philo, int to_unlock)
 {
 	if (to_unlock & FORK_LEFT)
-		pthread_mutex_unlock(philo->left_fork_mutex);
+		pthread_mutex_unlock(philo->left);
 	if (to_unlock & FORK_RIGHT)
-		pthread_mutex_unlock(philo->right_fork_mutex);
+		pthread_mutex_unlock(philo->right);
 	if (to_unlock & DEATH)
 		pthread_mutex_unlock(&philo->data->death_mutex);
 }

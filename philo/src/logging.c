@@ -15,7 +15,7 @@
 void	print_status(t_philo *philo, char *status)
 {
 	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("%lu %d %s\n", get_time() - philo->data->start,
+	printf("%llu %d %s\n", get_time() - philo->data->start,
 		philo->id, status);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
