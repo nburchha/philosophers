@@ -29,6 +29,24 @@ void	eat(t_philo *philo)
 	sem_post(philo->data->forks);
 }
 
+static void	philo_loop(t_philo *philo)
+{
+	while (1)
+	{
+		eat(philo);
+		philo->meal_count += 1;
+		if (philo->meal_count == philo->data->meal_count)
+		{
+			sem_post(philo->data->meal_sem);
+			return ;
+		}
+		print_status(philo, "is sleeping");
+		ft_sleep(philo->time_to_sleep);
+		print_status(philo, "is thinking");
+		usleep(500);
+	}
+}
+
 void	*philo_routine(void *philo_ptr)
 {
 	t_philo		*philo;
@@ -43,19 +61,6 @@ void	*philo_routine(void *philo_ptr)
 	pthread_detach(monitor_thread);
 	if (philo->id % 2 != 0)
 		ft_sleep(philo->time_to_eat / 2);
-	while (1)
-	{
-		eat(philo);
-		philo->meal_count += 1;
-		if (philo->meal_count == philo->data->meal_count)
-		{
-			sem_post(philo->data->meal_sem);
-			return (NULL);
-		}
-		print_status(philo, "is sleeping");
-		ft_sleep(philo->time_to_sleep);
-		print_status(philo, "is thinking");
-		usleep(500);
-	}
+	philo_loop(philo);
 	return (NULL);
 }

@@ -24,7 +24,8 @@ void	*monitor(void *param)
 		if (get_time() - philo->last_meal > (uint64_t)philo->data->time_to_die)
 		{
 			sem_wait(philo->data->print_sem);
-			printf("%llu %d died\n", (unsigned long long)(get_time() - philo->data->start),
+			printf("%llu %d died\n",
+				(unsigned long long)(get_time() - philo->data->start),
 				philo->id);
 			sem_post(philo->data->death_sem);
 			exit(1);
