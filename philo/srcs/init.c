@@ -6,11 +6,33 @@
 /*   By: nburchha <nburchha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 00:55:14 by niklasburch       #+#    #+#             */
-/*   Updated: 2024/06/01 14:35:38 by nburchha         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:04:12 by nburchha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philo.h"
+#include "philo.h"
+
+static void	init_single_philo(t_data *data, t_philo *philo, int i)
+{
+	philo->id = i + 1;
+	philo->last_meal = data->start;
+	philo->time_to_eat = data->time_to_eat;
+	philo->time_to_sleep = data->time_to_sleep;
+	philo->meal_count = 0;
+	pthread_mutex_init(&philo->meal_mutex, NULL);
+	pthread_mutex_init(&philo->last_meal_mutex, NULL);
+	philo->data = data;
+	if (i == data->philo_count - 1)
+	{
+		philo->left = &data->forks[(i + 1) % data->philo_count];
+		philo->right = &data->forks[i];
+	}
+	else
+	{
+		philo->left = &data->forks[i];
+		philo->right = &data->forks[(i + 1) % data->philo_count];
+	}
+}
 
 bool	init_philos(t_data *data)
 {
@@ -19,21 +41,11 @@ bool	init_philos(t_data *data)
 
 	philos = malloc(sizeof(t_philo) * data->philo_count);
 	if (!philos)
-		return (NULL);
+		return (false);
 	i = 0;
 	while (i < data->philo_count)
 	{
-		philos[i].id = i + 1;
-		philos[i].last_meal = data->start;
-		philos[i].time_to_eat = data->time_to_eat;
-		philos[i].time_to_sleep = data->time_to_sleep;
-		philos[i].meal_count = 0;
-		pthread_mutex_init(&philos[i].meal_mutex, NULL);
-		pthread_mutex_init(&philos[i].last_meal_mutex, NULL);
-		(&(philos[i]))->left_fork_mutex = &(data->forks[i]);
-		(&(philos[i]))->right_fork_mutex = &(data->forks[(i + 1) \
-		% data->philo_count]);
-		philos[i].data = data;
+		init_single_philo(data, &philos[i], i);
 		i++;
 	}
 	data->philos = philos;
@@ -65,8 +77,8 @@ bool	init_data(t_data *data, int argc, char **argv)
 	else
 		data->meal_count = -1;
 	if (data->philo_count < 1 || data->philo_count > 200 || \
-		data->time_to_die < 1 || data->time_to_eat < 1 || \
-		data->time_to_sleep < 1 || (argc == 6 && data->meal_count < 0))
+data->time_to_die < 1 || data->time_to_eat < 1 || \
+data->time_to_sleep < 1 || (argc == 6 && data->meal_count < 0))
 		return (false);
 	data->died = -1;
 	data->start = get_time();

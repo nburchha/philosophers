@@ -37,8 +37,8 @@ typedef struct s_philo
 	uint64_t		last_meal;
 	pthread_mutex_t	meal_mutex;
 	pthread_mutex_t	last_meal_mutex;
-	pthread_mutex_t	*right_fork_mutex;
-	pthread_mutex_t	*left_fork_mutex;
+	pthread_mutex_t	*right;
+	pthread_mutex_t	*left;
 	pthread_t		thread;
 	t_data			*data;
 }	t_philo;
