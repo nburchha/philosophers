@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Binaries
+# /philo
+# /philo_bonus
+!/philo.h
+
+.DS_Store
+
+.idea/
