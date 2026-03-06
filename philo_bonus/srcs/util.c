@@ -12,27 +12,6 @@
 
 #include "philo.h"
 
-void	die(t_philo *philo, int to_unlock) // TODO remove this function, its not used in the bonus
-{
-	int	current_flag;
-
-	if (!philo || !philo->data)
-		return ;
-	while (to_unlock)
-	{
-		current_flag = to_unlock & -to_unlock;
-		if (current_flag == SEM_FORKS)
-			close_unlink(&philo->data->forks, "/forks");
-		else if (current_flag == SEM_PRINT)
-			close_unlink(&philo->data->print_sem, "/print");
-		else if (current_flag == SEM_DEATH)
-			close_unlink(&philo->data->death_sem, "/death");
-		else if (current_flag == SEM_MEAL)
-			close_unlink(&philo->data->meal_sem, "/meal");
-		to_unlock &= ~current_flag;
-	}
-}
-
 uint64_t	get_time(void)
 {
 	struct timeval	current_time;
@@ -80,7 +59,6 @@ void	ft_sleep(uint64_t time)
 
 void	close_unlink(sem_t **s, const char *name)
 {
-	if (*s && *s != SEM_FAILED) sem_close(*s);
 	if (*s && *s != SEM_FAILED)
 		sem_close(*s);
 	sem_unlink(name);
@@ -93,21 +71,13 @@ void	create_sem_name(char *buffer, int id)
 	int	temp;
 	int	len;
 
-	i = 0;
-	while ("/philo_lm_"[i])
-	{
+	i = -1;
+	while ("/philo_lm_"[++i])
 		buffer[i] = "/philo_lm_"[i];
-		i++;
-	}
 	temp = id;
-	len = 0;
-	if (id == 0)
-		len = 1;
-	while (temp > 0)
-	{
+	len = (id == 0);
+	while (temp > 0 && ++len)
 		temp /= 10;
-		len++;
-	}
 	buffer[i + len] = '\0';
 	while (len > 0)
 	{

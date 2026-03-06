@@ -51,11 +51,9 @@ bool	init_philos(t_data *data)
 
 static bool	init_sync_sems(t_data *d)
 {
-	d->print_sem = d->death_sem = d->meal_sem = SEM_FAILED;
-	sem_unlink("/print");
-	sem_unlink("/death");
-	sem_unlink("/meal");
-	sem_unlink("/forks");
+	d->print_sem = SEM_FAILED;
+	d->death_sem = SEM_FAILED;
+	d->meal_sem = SEM_FAILED;
 	d->print_sem = sem_open("/print", O_CREAT | O_EXCL, 0644, 1);
 	d->death_sem = sem_open("/death", O_CREAT | O_EXCL, 0644, 0);
 	d->meal_sem = sem_open("/meal", O_CREAT | O_EXCL, 0644, 0);
@@ -83,6 +81,10 @@ bool	init_data(t_data *data, int argc, char **argv)
 		return (false);
 	data->died = -1;
 	data->start = get_time();
+	sem_unlink("/forks");
+	sem_unlink("/print");
+	sem_unlink("/death");
+	sem_unlink("/meal");
 	data->forks = sem_open("/forks", O_CREAT, 0644, data->philo_count);
 	if (data->forks == SEM_FAILED)
 		return (false);

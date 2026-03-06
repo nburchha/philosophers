@@ -14,8 +14,8 @@
 
 void	cleanup(t_data *data)
 {
-	int	i;
-		char name[30];
+	int		i;
+	char	name[30];
 
 	if (!data)
 		return ;
