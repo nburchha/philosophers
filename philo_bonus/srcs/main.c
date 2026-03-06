@@ -45,8 +45,11 @@ bool	start_processes(t_data *data)
 		}
 	}
 	if (data->meal_count != -1)
+	{
 		if (pthread_create(&data->monitor_thread, NULL, monitor_meals, data))
 			return (printf("Error creating meal monitor thread\n"), false);
+		pthread_detach(data->monitor_thread);
+	}
 	return (true);
 }
 
@@ -55,16 +58,25 @@ int	main(int argc, char **argv)
 	t_data	data;
 	int		i;
 
+	
 	if (!init_data(&data, argc, argv))
 		return (printf("Error: invalid arguments\n"), 1);
+	
 	if (!init_philos(&data))
 		return (cleanup(&data), printf("Error initializing philos\n"), 1);
+	
 	if (!start_processes(&data))
 		return (cleanup(&data), 1);
+	
 	sem_wait(data.death_sem);
+	
 	i = -1;
 	while (++i < data.philo_count)
 		kill(data.philos[i].pid, SIGKILL);
+	i = -1;
+	while (++i < data.philo_count)
+		waitpid(data.philos[i].pid, NULL, 0);
 	cleanup(&data);
+	
 	return (0);
 }

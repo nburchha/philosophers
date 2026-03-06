@@ -36,7 +36,10 @@ void	*philo_routine(void *philo_ptr)
 
 	philo = (t_philo *)philo_ptr;
 	if (pthread_create(&monitor_thread, NULL, monitor, philo))
+	{
+		printf("Error creating monitor thread for %d\n", philo->id);
 		return (NULL);
+	}
 	pthread_detach(monitor_thread);
 	if (philo->id % 2 != 0)
 		ft_sleep(philo->time_to_eat / 2);
