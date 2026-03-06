@@ -15,6 +15,6 @@
 void	print_status(t_philo *philo, char *status)
 {
 	sem_wait(philo->data->print_sem);
-	printf("%llu %d %s\n", get_time() - philo->data->start, philo->id, status);
+	printf("%llu %d %s\n", (unsigned long long)(get_time() - philo->data->start), philo->id, status);
 	sem_post(philo->data->print_sem);
 }
