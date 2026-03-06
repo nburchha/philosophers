@@ -57,3 +57,5 @@ dkms.conf
 !/philo.h
 
 .DS_Store
+
+.idea/

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philo.h"
+#include "philo.h"
 
 void	die(t_philo *philo, int to_unlock) // TODO remove this function, its not used in the bonus
 {

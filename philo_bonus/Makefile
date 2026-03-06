@@ -1,8 +1,14 @@
 NAME = philo_bonus
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g -fsanitize=thread
+CFLAGS = -Wall -Werror -Wextra
+INCLUDES = -I includes
+SRC_DIR = srcs
+OBJ_DIR = .obj
+
 SRC_FILES = main.c init.c util.c cleanup.c logging.c routine.c monitor.c
-OBJS = $(addprefix .obj/, $(SRC_FILES:.c=.o))
+SRCS = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+OBJS = $(addprefix $(OBJ_DIR)/, $(SRC_FILES:.c=.o))
+
 GREEN=\033[32m
 RED=\033[31m
 RESET=\033[0m
@@ -10,19 +16,22 @@ RESET=\033[0m
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "$(GREEN)Linking$(RESET)"
+	@echo "$(GREEN)Linking $(NAME)$(RESET)"
 	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-.obj/%.o: src/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
 	@echo "$(GREEN)Compiling $<$(RESET)"
-	@mkdir -p .obj
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
 clean:
-	@echo "$(RED)Removing $(OBJS)$(RESET)"
-	@rm -f $(OBJS)
+	@echo "$(RED)Removing objects$(RESET)"
+	@rm -rf $(OBJ_DIR)
+
 fclean: clean
 	@echo "$(RED)Removing $(NAME)$(RESET)"
-	@rm -f $(NAME) $(BONUS_NAME)
-re: fclean $(NAME)
+	@rm -f $(NAME)
 
-.PHONY: clean fclean re all bonus
+re: fclean all
+
+.PHONY: clean fclean re all

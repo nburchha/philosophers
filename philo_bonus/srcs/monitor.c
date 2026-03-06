@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/philo.h"
+#include "philo.h"
 
 void	*monitor(void *param)
 {
@@ -24,7 +24,7 @@ void	*monitor(void *param)
 		if (get_time() - philo->last_meal > (uint64_t)philo->data->time_to_die)
 		{
 			sem_wait(philo->data->print_sem);
-			printf("%lu %d died\n", get_time() - philo->data->start, philo->id);
+			printf("%llu %d died\n", get_time() - philo->data->start, philo->id);
 			sem_post(philo->data->death_sem);
 			exit(1);
 		}
